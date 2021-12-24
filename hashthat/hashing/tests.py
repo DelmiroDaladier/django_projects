@@ -4,8 +4,9 @@ from selenium import webdriver
 from .forms import HashForm
 import hashlib
 from .models import Hash
+from django.core.exceptions import ValidationError
 
-""" class FunctionalTestsCase(TestCase):
+class FunctionalTestsCase(TestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -22,7 +23,7 @@ from .models import Hash
         self.assertIn('2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824', self.browser.page_source)
 
     def tearDown(self):
-        self.browser.quit() """
+        self.browser.quit()
 
 class UnitTestCase(TestCase):
 
@@ -55,3 +56,11 @@ class UnitTestCase(TestCase):
         hash = self.save_hash()
         response = self.client.get('/hash/2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824')
         self.assertContains(response,'hello')
+    
+    def test_bad_data(self):
+        def bad_hash():
+            hash = Hash()
+            hash.hash = '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824hhhhhhh'
+            hash.full_clean()
+        
+        self.assertRaises(ValidationError, bad_hash)
