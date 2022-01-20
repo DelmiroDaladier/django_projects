@@ -1,3 +1,5 @@
+import os.path
+from django.conf import settings
 from rest_framework.test import APITestCase
 
 from store.models import Product
@@ -47,3 +49,18 @@ class ProductListTestCase(APITestCase):
         self.assertIsNone(response.data['previous'])
         self.assertEqual(response.data['count'], products_count)
         self.assertEqual(len(response.data['results']), products_count)
+
+class ProductUpdateTestCase(APITestCase):
+    def test_update_product(self):
+        product = Product.objects.first()
+        response = self.client.patch(
+            '/api/v1/products/{}/'.format(product.id),
+            {
+                'name': 'New Product',
+                'description': 'Awesome product',
+                'price': 123.45,
+            },
+            format='json',
+        )
+        updated = Product.objects.get(id=product.id)
+        self.assertEqual(updated.name, 'New Product')
