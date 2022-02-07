@@ -21,5 +21,6 @@ from shortener import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index,  name='index'),
-    path('create', views.create, name='create')
+    path('create', views.create, name='create'),
+    path('<str:pk>', views.follow_link, name='follow_link'),
 ]
