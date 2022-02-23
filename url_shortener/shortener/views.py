@@ -12,6 +12,7 @@ def index(request):
 def create(request):
     if request.method == 'POST':
         link = request.POST['link']
+        link = create_helper.remove_http(link)
 
         if create_helper.check_url(link):
             uid = str(uuid.uuid4())[:5]
