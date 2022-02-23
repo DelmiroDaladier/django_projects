@@ -34,6 +34,9 @@
       },
       success: function(data){
         $('h2').html("localhost:8000/"+data)
+      },
+      error: function(data){
+        $('h2').html(data["responseJSON"]["error"])
       }
     });
   });
